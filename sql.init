@@ -1,0 +1,29 @@
+CREATE TABLE zerocard (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    date_of_birth DATE NOT NULL
+    card_number VARCHAR(50) UNIQUE NOT NULL,
+    balance INTEGER DEFAULT 100,
+    passenger_type VARCHAR(20) CHECK (passenger_type IN ('kid', 'adult', 'senior')),
+    discount_count INTEGER DEFAULT 0
+);
+
+CREATE TABLE travel (
+    id SERIAL PRIMARY KEY,
+    card_id VARCHAR(50) NOT NULL,
+    travel_type VARCHAR(20) NOT NULL CHECK (travel_type IN ('single', 'return')),
+    from_location VARCHAR(20) NOT NULL CHECK (from_location IN ('station', 'airport')),
+    to_location VARCHAR(20) NOT NULL CHECK (to_location IN ('station', 'airport')),
+    passenger_type VARCHAR(20) NOT NULL CHECK (passenger_type IN ('kid', 'adult', 'senior')),
+    travel_cost DECIMAL(10, 2) NOT NULL,
+    travel_date DATE NOT NULL,
+	discount_enabled Boolean default false
+    CONSTRAINT fk_card_id FOREIGN KEY (card_id) REFERENCES zerocard(card_number),
+    CONSTRAINT chk_different_locations CHECK (from_location <> to_location)
+);
+
+CREATE table location {
+	id serial primary key
+	name varchar(100) not null
+	code INTEGER CHECK (code >= 0 AND code <= 999)
+}
